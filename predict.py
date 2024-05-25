@@ -4,15 +4,24 @@ import joblib
 
 # Load Model Machine Learning
 def load_model(file_path):
-    model = joblib.load(file_path) # Model Random Forest
-    return model
+    try:
+        model = joblib.load(file_path)
+        return model
+    except Exception as e:
+        st.error(f"Error loading the model: {e}")
+        return None
 
 def app():
     # Judul dan Informasi mengenai Menu Prediksi
     st.title('Air Quality Prediction')
 
     # Load the trained classifier model from the file
-    classifier = load_model("models/rfc.sav")
+    model_file_path = "models/rfc.sav"  # Ganti dengan path model yang benar
+    classifier = load_model(model_file_path)
+    if classifier:
+        st.write("Model berhasil dimuat.")
+    else:
+        st.write("Model tidak dapat dimuat.")
 
     # Define the prediction function
     def predict_pollution(so2, no2, o3, co, pm10, pm25):
