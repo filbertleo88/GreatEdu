@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from keras.models import load_model as keras_load_model
+from keras.models import load_model as keras_model
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import tensorflow as tf
@@ -41,7 +41,8 @@ def app():
     # Load model
     model_filename = 'models/my_model'  # Adjust filename if needed
     # model = tf.keras.models.load_model(model_filename)
-    model = tf.keras.models.load_model('model_101 (2).h5')
+    model = keras_model('model_101.h5')
+    st.write(model)
     # model = joblib.load("models/model_101.pkl")
 
     # Function to create new dataframes for each pollutant
