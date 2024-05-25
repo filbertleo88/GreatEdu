@@ -29,8 +29,8 @@ pollutant_parameters = ['SO2', 'NO2', 'O3', 'CO', 'PM10', 'PM2.5']
 #     print(f"File {joblib_file} does not exist.")
 
 # To load the model back later
-pickle_file = 'rfc.pkl'
-classifier = pickle.load(open(pickle_file),'rb')
+# pickle_file = 
+classifier = pickle.load(open('rfc.pkl','rb'))
 # with open(pickle_file, 'rb') as file:
     # classifier = joblib.load(file)
 
