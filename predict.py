@@ -1,5 +1,6 @@
 import streamlit as st
 import joblib
+import lightgbm
 
 
 # Load Model Machine Learning
@@ -16,7 +17,7 @@ def app():
     st.title('Air Quality Prediction')
 
     # Load the trained classifier model from the file
-    model_file_path = "models/rfc.sav"  # Ganti dengan path model yang benar
+    model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
     classifier = load_model(model_file_path)
     if classifier:
         st.write("Model berhasil dimuat.")
