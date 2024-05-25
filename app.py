@@ -213,17 +213,18 @@ st.plotly_chart(fig)
 st.subheader("Halaman Prediksi")
 
 # Input parameters
-st.write("Masukkan nilai-nilai parameter untuk melakukan prediksi:")
-SO2 = st.number_input("SO2", min_value=0.0000, max_value=1000.0)
-NO2 = st.number_input("NO2", min_value=0.0000, max_value=1000.0)
-O3 = st.number_input("O3", min_value=0.0000, max_value=1000.0)
-CO = st.number_input("CO", min_value=0.0000, max_value=1000.0)
-PM10 = st.number_input("PM10", min_value=0.0000, max_value=1000.0)
-PM25 = st.number_input("PM2.5", min_value=0.0000, max_value=1000.0)
+# Create input fields for user to enter pollution data
+so2 = st.number_input('SO2', min_value=0.0000, max_value=1000.0)
+no2 = st.number_input('NO2', min_value=0.0000, max_value=1000.0)
+o3 = st.number_input('O3', min_value=0.0000, max_value=1000.0)
+co = st.number_input('CO', min_value=0.0000, max_value=1000.0)
+pm10 = st.number_input('PM10', min_value=0.0000, max_value=1000.0)
+pm25 = st.number_input('PM2.5', min_value=0.0000, max_value=1000.0)
 
+result = ""
 # Button to trigger prediction dengan key unik
 if st.button('Predict'):
-    prediction = predict_pollution(SO2, NO2, O3, CO, PM10, PM25)
+    prediction = predict_pollution(so2, no2, o3, co, pm10, pm25)
     pollution_level = map_pollution_level(prediction[0])
     st.success(f'The predicted pollution level is: {pollution_level}')
 
