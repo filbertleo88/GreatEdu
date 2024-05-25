@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
 import joblib
+import tensorflow as tf
 
 from numpy import array
 from numpy import hstack
@@ -31,6 +32,15 @@ def app():
         return df
 
     df_ISPU = load_data(filepath)
+
+    # Load the trained classifier model from the file
+    model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
+    classifier = load_model(model_file_path)
+
+    # Load model
+    model_filename = 'models/my_model'  # Adjust filename if needed
+    model = tf.keras.models.load_model(model_filename)
+    # model = joblib.load("models/model_101.pkl")
 
     # Function to create new dataframes for each pollutant
     def makenewdf(df_ISPU):
@@ -99,13 +109,6 @@ def app():
             )
             st.plotly_chart(fig)
 
-    # Load the trained classifier model from the file
-    model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
-    classifier = load_model(model_file_path)
-
-    # Load model
-    model_filename = 'model_101 (1).h5'  # Adjust filename if needed
-    model = keras_load_model(model_filename)
     if model:
         st.write("Model loaded and ready for predictions.")
 
