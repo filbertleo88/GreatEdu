@@ -3,20 +3,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
-import pickle
-import joblib
-from sklearn.ensemble import RandomForestClassifier
-import os
+
 
 def load_data(file_path, index_col=None):
     # index_col akan diabaikan jika None
     df = pd.read_csv(file_path, index_col=index_col)
     return df
-
-# Load Model Machine Learning
-def load_model(file_path):
-    model = joblib.load(file_path) # Model Random Forest
-    return model
 
 def app():
     # Judul dan Informasi mengenai Menu EDA
@@ -29,9 +21,6 @@ def app():
     pollutant_parameters = ['SO2', 'NO2', 'O3', 'CO', 'PM10', 'PM2.5']
 
 #============================================================================
-
-    # Load the trained classifier model from the file
-    classifier = load_model("random_forest.sav")
 
     # # joblib_file = 'rfc.joblib'
     # # classifier = None # Initialize classifier to None
@@ -65,17 +54,7 @@ def app():
 
 #====================================================================
 
-    # Define the prediction function
-    def predict_pollution(so2, no2, o3, co, pm10, pm25):
-        if classifier is not None:
-            prediction = classifier.predict([[so2, no2, o3, co, pm10, pm25]])
-            return prediction
-        else:
-            raise ValueError("The classifier model is not loaded.")
 
-    def map_pollution_level(prediction):
-        pollution_levels = {0: 'Good', 1: 'Moderate', 2: 'Unhealthy', 3: 'Very unhealthy'}
-        return pollution_levels[prediction]
 
 #====================================================================
 
@@ -185,24 +164,7 @@ def app():
 
 #===========================================================================
 
-    # Halaman Prediksi
-    st.subheader("Halaman Prediksi")
-
-    # Input parameters
-    # Create input fields for user to enter pollution data
-    so2 = st.number_input('SO2', min_value=0.0000, max_value=1000.0)
-    no2 = st.number_input('NO2', min_value=0.0000, max_value=1000.0)
-    o3 = st.number_input('O3', min_value=0.0000, max_value=1000.0)
-    co = st.number_input('CO', min_value=0.0000, max_value=1000.0)
-    pm10 = st.number_input('PM10', min_value=0.0000, max_value=1000.0)
-    pm25 = st.number_input('PM2.5', min_value=0.0000, max_value=1000.0)
-
-    result = ""
-    # Button to trigger prediction dengan key unik
-    if st.button('Predict'):
-        prediction = predict_pollution(so2, no2, o3, co, pm10, pm25)
-        pollution_level = map_pollution_level(prediction[0])
-        st.success(f'The predicted pollution level is: {pollution_level}')
+    
 
 
 
