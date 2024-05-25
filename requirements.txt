@@ -2,8 +2,9 @@ numpy
 streamlit
 seaborn
 matplotlib
+statsmodels
 plotly
 pandas
-scikit-learn==1.2.2
-tensorflow
+scikit-learn
 joblib
+streamlit-option-menu
