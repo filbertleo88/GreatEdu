@@ -131,10 +131,23 @@ def app():
             forecast_df.index = date_range
 
             st.subheader("Forecasted Data")
-            st.write(forecast_df)
+            # st.write(forecast_df)
 
             # Plot the forecasted data
             plot_forecast(df, forecast_df)
 
-if __name__ == "__main__":
-    main()
+            def predict_pollution(so2, no2, o3, co, pm10, pm25):
+                if classifier is not None:
+                    prediction = classifier.predict([[so2, no2, o3, co, pm10, pm25]])
+                    return prediction
+                else:
+                    raise ValueError("The classifier model is not loaded.")
+
+            def map_pollution_level(prediction):
+                pollution_levels = {0: 'Good', 1: 'Moderate', 2: 'Unhealthy', 3: 'Very Unhealthy'}
+                return pollution_levels[prediction]
+            
+            forecast_df['Pollution Level'] = forecast_df.apply(lambda row: map_pollution_level(predict_pollution(row['SO2'], row['NO2'], row['O3'], row['CO'], row['PM10'], row['PM2.5'])[0]), axis=1)
+
+            st.subheader("Forecasted Data with Pollution Levels")
+            st.dataframe(forecast_df)

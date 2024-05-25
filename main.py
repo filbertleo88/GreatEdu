@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-import home, eda, predict
+import home, eda, predict, forecast
 
 st.set_page_config(
     page_title="Dashboard",
@@ -25,7 +25,7 @@ class MultiApp:
         with st.sidebar:        
             app = option_menu(
                 menu_title='Dashboard',
-                options=['Home','EDA','Prediction','About'],
+                options=['Home','EDA','Prediction', 'Forecast','About'],
                 icons=['house-fill','cloud-lightning-rain-fill','bi-water','info-circle-fill'],
                 menu_icon='bi-cast',
                 default_index=0,
@@ -43,6 +43,8 @@ class MultiApp:
             eda.app()    
         if app == "Prediction":
             predict.app()        
+        if app == "Forecast":
+            forecast.app()        
         # if app == 'About':
         #     about.app()     
   
