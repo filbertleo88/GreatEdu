@@ -6,6 +6,7 @@ from keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import tensorflow as tf
+from tensorflow.keras.optimizers import Adam
 
 from numpy import array
 from numpy import hstack
@@ -40,7 +41,7 @@ def app():
     # Load model
     model_filename = 'models/my_model'  # Adjust filename if needed
     # model = tf.keras.models.load_model(model_filename)
-    model = load_model('model_101 (2).h5')
+    model = tf.keras.models.load_model('model_101 (2).h5')
     # model = joblib.load("models/model_101.pkl")
 
     # Function to create new dataframes for each pollutant
