@@ -1,7 +1,5 @@
 import streamlit as st
 import joblib
-import lightgbm
-
 
 # Load Model Machine Learning
 def load_model(file_path):

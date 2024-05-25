@@ -4,11 +4,19 @@ import numpy as np
 import plotly.graph_objects as go
 from keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
-import pickle
+import joblib
 
 from numpy import array
 from numpy import hstack
 
+# Load Model Machine Learning
+def load_model(file_path):
+    try:
+        model = joblib.load(file_path)
+        return model
+    except Exception as e:
+        st.error(f"Error loading the model: {e}")
+        return None
 
 def app():
     st.title('Pollutant Forecasting Streamlit App')
@@ -92,8 +100,8 @@ def app():
             st.plotly_chart(fig)
 
     # Load the trained classifier model from the file
-    pickle_in = open('rfc.pkl', 'rb')
-    classifier = pickle.load(pickle_in)
+    model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
+    classifier = load_model(model_file_path)
 
     # Load model
     model_filename = 'model_101 (1).h5'  # Adjust filename if needed
