@@ -19,10 +19,6 @@ def app():
     # Load the trained classifier model from the file
     model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
     classifier = load_model(model_file_path)
-    if classifier:
-        st.write("Model berhasil dimuat.")
-    else:
-        st.write("Model tidak dapat dimuat.")
 
     # Define the prediction function
     def predict_pollution(so2, no2, o3, co, pm10, pm25):
