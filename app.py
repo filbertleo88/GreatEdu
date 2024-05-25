@@ -30,9 +30,22 @@ pollutant_parameters = ['SO2', 'NO2', 'O3', 'CO', 'PM10', 'PM2.5']
 
 # To load the model back later
 # pickle_file = 
-classifier = pickle.load(open('rfc.pkl','rb'))
+# classifier = pickle.load(open('rfc.pkl','rb'))
 # with open(pickle_file, 'rb') as file:
     # classifier = joblib.load(file)
+
+# Load the model
+model_path = 'rfc.joblib'
+
+if os.path.exists(model_path):
+    try:
+        classifier = joblib.load(model_path)
+    except Exception as e:
+        st.error(f"Error loading the model: {e}")
+        classifier = None
+else:
+    st.error("Model file not found.")
+    classifier = None
 
 # Define the prediction function
 def predict_pollution(so2, no2, o3, co, pm10, pm25):
