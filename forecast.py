@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from keras.models import load_model as keras_load_model
+# from keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import tensorflow as tf
