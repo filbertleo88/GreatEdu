@@ -35,11 +35,12 @@ pollutant_parameters = ['SO2', 'NO2', 'O3', 'CO', 'PM10', 'PM2.5']
     # classifier = joblib.load(file)
 
 # Load the model
-model_path = 'rfc.joblib'
+model_path = 'rfc.pkl'
 
 if os.path.exists(model_path):
     try:
-        classifier = joblib.load(model_path)
+        with open(model_path, 'rb') as file:
+            classifier = pickle.load(file)
     except Exception as e:
         st.error(f"Error loading the model: {e}")
         classifier = None
