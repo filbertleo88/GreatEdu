@@ -39,7 +39,7 @@ def app():
 
     # Load model
     model_filename = 'models/my_model'  # Adjust filename if needed
-    model = keras_load_model(model_filename)
+    model = tf.keras.models.load_model(model_filename)
     # model = joblib.load("models/model_101.pkl")
 
     # Function to create new dataframes for each pollutant
