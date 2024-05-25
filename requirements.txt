@@ -4,6 +4,6 @@ seaborn
 matplotlib
 plotly
 pandas
-scikit-learn
+scikit-learn==1.4.2
 tensorflow
 joblib
