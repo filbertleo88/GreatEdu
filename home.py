@@ -30,33 +30,18 @@ def app():
     # Dataset
     st.subheader('Dataset')
 
-    # Mengunggah file CSV
-    uploaded_file = st.file_uploader("Unggah file CSV", type="csv")
-
-    # Opsi untuk menggunakan dataset default
-    use_default = st.checkbox("Gunakan dataset default")
-
-    # Jika file telah diunggah
-    if uploaded_file is not None:
-        # Membaca file CSV ke dalam DataFrame
-        df = load_data(uploaded_file)
-        df['Date'] = pd.to_datetime(df['Date'])
-        df.set_index('Date', inplace=True)
-    elif use_default:
-        # Menggunakan dataset default
-        default_file_path = "dataset.csv"  # Ganti dengan path sebenarnya
-        df = load_data(default_file_path)
-        df['Date'] = pd.to_datetime(df['Date'])
-        df.set_index('Date', inplace=True)
-    else:
-        df = None
+    # Membaca file CSV ke dalam DataFrame
+    default_file_path = "dataset.csv"
+    df = load_data(default_file_path)
+    df['Date'] = pd.to_datetime(df['Date'])
+    df.set_index('Date', inplace=True)
 
     # Menampilkan data CSV dalam tabel jika ada data yang valid
     if df is not None:
         st.subheader("Data Polusi Udara di Seoul")
         st.dataframe(df)
     else:
-        st.write("Silakan unggah file CSV atau pilih untuk menggunakan dataset default.")
+        st.write("Silakan download dataset.")
 
 #=========================================================================================
 
