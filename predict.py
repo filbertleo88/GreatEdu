@@ -2,14 +2,14 @@ import streamlit as st
 import joblib
 import pickle
 
-# Load Model Machine Learning
-def load_model(file_path):
-    try:
-        model = joblib.load(file_path)
-        return model
-    except Exception as e:
-        st.error(f"Error loading the model: {e}")
-        return None
+# # Load Model Machine Learning
+# def load_model(file_path):
+#     try:
+#         model = joblib.load(file_path)
+#         return model
+#     except Exception as e:
+#         st.error(f"Error loading the model: {e}")
+#         return None
     
 def load_mod(model_name):  # function for load the model and scaler
     model_in = open(model_name, 'rb')
@@ -22,7 +22,7 @@ def app():
     st.title('Air Quality Prediction')
 
     # Load the trained classifier model from the file
-    model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
+    # model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
     # classifier = load_model(model_file_path)
 
     model_file = "rfc.pkl"  # Ganti dengan path model yang benar
