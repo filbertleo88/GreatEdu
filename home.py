@@ -41,7 +41,7 @@ def app():
         st.subheader("Data Polusi Udara di Seoul")
         st.dataframe(df)
     else:
-        st.write("Silakan download dataset.")
+        st.write("Silakan download dataset terlebih dahulu.")
 
 #=========================================================================================
 

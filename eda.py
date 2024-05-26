@@ -20,42 +20,6 @@ def app():
 
     pollutant_parameters = ['SO2', 'NO2', 'O3', 'CO', 'PM10', 'PM2.5']
 
-#============================================================================
-
-    # # joblib_file = 'rfc.joblib'
-    # # classifier = None # Initialize classifier to None
-
-    # # if os.path.exists(joblib_file):
-    # #     classifier = joblib.load(joblib_file)
-    # #     except Exception as e:
-    # #         print(f"An error occurred while loading the model: {e}")
-    # # else:
-    # #     print(f"File {joblib_file} does not exist.")
-
-    # # To load the model back later
-    # # pickle_file = 
-    # # classifier = pickle.load(open('rfc.pkl','rb'))
-    # # with open(pickle_file, 'rb') as file:
-    #     # classifier = joblib.load(file)
-
-    # # Load the model
-    # model_path = 'rfc.pkl'
-
-    # if os.path.exists(model_path):
-    #     try:
-    #         with open(model_path, 'rb') as file:
-    #             classifier = pickle.load(file)
-    #     except Exception as e:
-    #         st.error(f"Error loading the model: {e}")
-    #         classifier = None
-    # else:
-    #     st.error("Model file not found.")
-    #     classifier = None
-
-#====================================================================
-
-
-
 #====================================================================
 
     # Sidebar untuk filter dan tombol prediksi

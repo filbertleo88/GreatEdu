@@ -5,8 +5,24 @@ import plotly.graph_objects as go
 from keras.models import load_model as keras_model
 from sklearn.preprocessing import MinMaxScaler
 import joblib
+
+import pickle
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.callbacks import EarlyStopping
+
 import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import LSTM, Bidirectional
+from keras.layers import Dense
+from keras.layers import RepeatVector
+from keras.layers import TimeDistributed
+from keras.layers import Dropout
+
+from tensorflow.keras.callbacks import EarlyStopping, LearningRateScheduler
 
 from numpy import array
 from numpy import hstack
@@ -41,8 +57,10 @@ def app():
     # Load model
     model_filename = 'models/my_model'  # Adjust filename if needed
     # model = tf.keras.models.load_model(model_filename)
-    model = keras_model('model_101.h5')
-    st.write(model)
+    # model = keras_model('model_101.h5')
+    # st.write(model)
+
+    model = tf.keras.models.load_model('model_101.h5')
     # model = joblib.load("models/model_101.pkl")
 
     # Function to create new dataframes for each pollutant
