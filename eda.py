@@ -5,6 +5,13 @@ import plotly.graph_objects as go
 import numpy as np
 from scipy.stats import pearsonr, kendalltau
 
+# Lib to create maps
+import folium
+from folium import Choropleth, Circle, Marker
+from folium.plugins import HeatMap, MarkerCluster
+from streamlit_folium import folium_static
+import geopandas as gpd
+
 
 def load_data(file_path, index_col=None):
     # index_col akan diabaikan jika None
@@ -33,14 +40,7 @@ def app():
 
     # Sidebar untuk filter
     with st.sidebar:
-        # col1, col2, col3 = st.columns(3)
-        # with col1:
-        #     st.write(' ')
-        # with col2:
-        #     st.image("https://cdn1.iconfinder.com/data/icons/air-pollution-21/62/Air-quality-mask-pollution-protection-256.png",
-        #             width=100)
-        # with col3:
-        #     st.write(' ')
+
         st.header('Filters')
 
         # district filter with multiselect
@@ -163,6 +163,66 @@ def app():
 
     col1.plotly_chart(fig_best, use_container_width=True)
     col2.plotly_chart(fig_worst, use_container_width=True)
+
+## AQI Map
+    st.subheader("AQI Map")
+    with st.expander("AQI Map"):
+        # Load data
+        df_map = filtered_data.copy()
+        df_map = df_map[['AQI','Latitude','Longitude','District']]
+        
+        seoul_geojson = gpd.read_file('seoul_municipalities_geo_simple.json')
+
+        # Calculate average AQI per district
+        avg_aqi_district = df_map.groupby('District').agg({
+            'AQI': 'mean', 
+            'Latitude': 'mean', 
+            'Longitude': 'mean'
+        }).reset_index()
+        avg_aqi_district.columns = ['District', 'Average AQI', 'Latitude', 'Longitude']
+        
+        # Merge GeoJSON with average AQI data
+        seoul_geojson = seoul_geojson.merge(avg_aqi_district, left_on='name_eng', right_on='District', how='left')
+
+        # Initialize the map centered around Seoul
+        pollutant_map = folium.Map(location=[37.5665, 126.9780], tiles='cartodbpositron', zoom_start=11)
+
+        # Add the choropleth layer
+        Choropleth(
+            geo_data=seoul_geojson,
+            data=avg_aqi_district,
+            columns=['District', 'Average AQI'],
+            key_on='feature.properties.name_eng',
+            fill_color='YlOrRd',
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            legend_name='Average AQI by District',
+            reset=True
+        ).add_to(pollutant_map)
+
+        # Add markers for the average AQI of each district
+        for idx, row in avg_aqi_district.iterrows():
+            latitude = row['Latitude']
+            longitude = row['Longitude']
+            district = row['District']
+            average_aqi = row['Average AQI']
+            station = f"{district} AQI={average_aqi:.2f}"
+
+            if average_aqi > 151:
+                pop_color = 'red'  # Red for very bad AQI
+            elif average_aqi > 101:
+                pop_color = 'orange'  # Orange for moderate AQI
+            else:
+                pop_color = 'green'  # Green for good AQI
+
+            folium.Marker(
+                location=[latitude, longitude],
+                popup=station,
+                icon=folium.Icon(color=pop_color)
+            ).add_to(pollutant_map)
+        
+        # Display the map
+        folium_static(pollutant_map, width=1000, height=600)
 
 #==================================================================
 ## Time Series of Air Pollutant
@@ -306,8 +366,6 @@ def app():
     st.plotly_chart(fig, use_container_width=True)
 
 #===================================================================
-
-    
 
 
 

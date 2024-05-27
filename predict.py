@@ -50,3 +50,7 @@ def app():
         prediction = predict_pollution(so2, no2, o3, co, pm10, pm25)
         pollution_level = map_pollution_level(prediction[0])
         st.success(f'The predicted pollution level is: {pollution_level}')
+
+
+#=============================================================
+   

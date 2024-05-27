@@ -11,3 +11,6 @@ lightgbm==4.3.0
 keras == 2.15.0
 tensorflow == 2.15.0
 scipy
+folium
+streamlit_folium
+geopandas

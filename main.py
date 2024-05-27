@@ -1,12 +1,11 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-import home, eda, predict, forecast
+import home, eda, predict, forecast, about
 
-st.set_page_config(
-    page_title="Dashboard",
-    layout="wide"
-)
+st.set_page_config(layout='wide',
+                    page_icon="😷",
+                    page_title="Air Quality Seoul")
     
 class MultiApp:
 
@@ -22,11 +21,12 @@ class MultiApp:
 
     def run():
         # Sidebar
-        with st.sidebar:        
+        with st.sidebar:     
+      
             app = option_menu(
                 menu_title='Dashboard',
                 options=['Home','EDA','Prediction', 'Forecast','About'],
-                icons=['house','bar-chart','bi-water','info-circle-fill'],
+                icons=['house','bar-chart','alt','activity','info-circle-fill'],
                 menu_icon='wind',
                 default_index=0,
                 styles={
@@ -45,7 +45,7 @@ class MultiApp:
             predict.app()        
         if app == "Forecast":
             forecast.app()        
-        # if app == 'About':
-        #     about.app()     
+        if app == 'About':
+            about.app()     
   
     run()            
