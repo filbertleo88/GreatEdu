@@ -112,7 +112,7 @@ def app():
                     type="date"
                 )
             )
-            st.plotly_chart(fig)
+            st.plotly_chart(fig, use_container_width=True)
 
     if model:
         # Number input for forecast days
@@ -167,6 +167,6 @@ def app():
 
             # Tambahkan kolom district
             forecast_df['District'] = choose_data
-            
+
             st.subheader("Data Prakiraan dengan Kategori AQI")
             st.dataframe(forecast_df, use_container_width=True)

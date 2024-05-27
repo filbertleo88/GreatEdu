@@ -50,7 +50,6 @@ def app():
 
     st.divider()
     # Dataset
-
     # Membaca file CSV ke dalam DataFrame
     file_path = "datasets/df_final.csv"
     df = load_data(file_path)
@@ -249,4 +248,3 @@ def app():
     url = "https://airkorea.or.kr/eng/khaiInfo?PMENU_NO=166"
     st.caption("Dikutip dari AIRKOREA [Korea Comprehensive Air-quality Index (CAI)](%s)" % url)
 
-        #     <td>Very Unhealthy</td>
