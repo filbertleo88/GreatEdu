@@ -210,7 +210,7 @@ def app():
     )
 
     # Display the chart in Streamlit
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 #==================================================================
 ## Distribution of Air Pollutant
 
@@ -244,7 +244,7 @@ def app():
                                 color='AQI Category', color_discrete_map=category_colors,
                                 title=f'{selected_parameter1} vs. {selected_parameter2} Correlation')
 
-        st.plotly_chart(fig_scatter)
+        st.plotly_chart(fig_scatter, use_container_width=True)
 
 #==================================================================
 # Air Particle Correlation with AQI Category
@@ -303,7 +303,7 @@ def app():
     fig = px.bar(agg_data, x='District', y=agg_data.columns[1:], barmode='group',
                 title='Average Pollution Levels by District',
                 labels={'value': 'Average Pollution Level', 'variable': 'Pollutant'})
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 #===================================================================
 
