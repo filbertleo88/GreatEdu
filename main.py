@@ -26,8 +26,8 @@ class MultiApp:
             app = option_menu(
                 menu_title='Dashboard',
                 options=['Home','EDA','Prediction', 'Forecast','About'],
-                icons=['house-fill','cloud-lightning-rain-fill','bi-water','info-circle-fill'],
-                menu_icon='bi-cast',
+                icons=['house','bar-chart','bi-water','info-circle-fill'],
+                menu_icon='wind',
                 default_index=0,
                 styles={
                         "container": {"padding": "5!important","background-color":'black'},

@@ -31,7 +31,7 @@ def app():
     st.subheader('Dataset')
 
     # Membaca file CSV ke dalam DataFrame
-    default_file_path = "dataset.csv"
+    default_file_path = "df_final.csv"
     df = load_data(default_file_path)
     df['Date'] = pd.to_datetime(df['Date'])
     df.set_index('Date', inplace=True)
