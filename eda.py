@@ -20,10 +20,10 @@ def load_data(file_path, index_col=None):
 
 def app():
     # Judul dan Informasi mengenai Menu EDA
-    st.title('Air Quality Dashboard 2017 - 2019 in 25 Seoul districts')
+    st.title('Dasboard Kualitas Udara dari 25 Daerah di Seoul (2017 - 2019) ')
     
     # Load data
-    df = load_data('df_final.csv')
+    df = load_data('datasets/df_final.csv')
     df['Date'] = pd.to_datetime(df['Date'])
 
     pollutant_parameters = ['SO2', 'NO2', 'O3', 'CO', 'PM10', 'PM2.5', 'AQI']
@@ -44,15 +44,15 @@ def app():
         st.header('Filters')
 
         # district filter with multiselect
-        selected_districts = st.multiselect('Select District', ['Overall District'] + list(df['District'].unique()))
+        selected_districts = st.multiselect('Pilih Daerah', ['Overall District'] + list(df['District'].unique()))
 
-        selected_category = st.selectbox('Select AQI Category',
+        selected_category = st.selectbox('Pilih Kategori AQI',
                                         ['Overall Category'] + list(df['AQI Category'].unique()), index=0)
         
-        start_date = st.date_input('Start Date', min(df['Date']).date(),
+        start_date = st.date_input('Tanggal Mulai', min(df['Date']).date(),
                                         min_value=pd.to_datetime('2017-01-01').date(),
                                         max_value=pd.to_datetime('2019-12-31').date())
-        end_date = st.date_input('End Date', max(df['Date']).date(),
+        end_date = st.date_input('Tanggal Berakhir', max(df['Date']).date(),
                                         min_value=pd.to_datetime('2017-01-01').date(),
                                         max_value=pd.to_datetime('2019-12-31').date())
      
@@ -81,9 +81,9 @@ def app():
                             (df['Date'] >= start_datetime) & (df['Date'] <= end_datetime)]
 
 ## Total Days of AQI Category
-    # Opsi Stasiun
-    selected_district_str = ', '.join(selected_districts) if selected_districts else 'All districts'
-    st.write(f"**Key Metrics for {selected_district_str} - {selected_category}**")
+    # Opsi Daerah
+    selected_district_str = ', '.join(selected_districts) if selected_districts else 'Semua Daerah'
+    st.write(f"**Metrik Utama untuk {selected_district_str} - {selected_category}**")
     category_counts = filtered_data.groupby('AQI Category')['Date'].nunique()
     cols = st.columns(4)
     for index, (category, count) in enumerate(category_counts.items()):
@@ -97,7 +97,7 @@ def app():
         col.markdown(f"""
             <div style="color:{color};">
                 <h3>{category}</h3>
-                <p>{formatted_count} Days</p>
+                <p>{formatted_count} Hari</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -114,7 +114,7 @@ def app():
         category_counts, 
         values='Count', 
         names='AQI Category', 
-        title='Air Quality Categories Percentage',
+        title='Persentase Kategori Kualitas Udara',
         color='AQI Category',
         color_discrete_map=category_colors
     )
@@ -136,10 +136,10 @@ def app():
 
     # Create bar plots
     fig_best = px.bar(top_5_best, x='District', y='Average AQI', 
-                    title='Top 5 Districts with Best Average AQI', 
+                    title='5 Daerah dengan Rata-rata AQI Terbaik', 
                     color='Average AQI', color_continuous_scale=color_scale_best)
     fig_worst = px.bar(top_5_worst, x='District', y='Average AQI', 
-                    title='Top 5 Districts with Worst Average AQI', 
+                    title='5 Daerah dengan Rata-rata AQI Terburuk', 
                     color='Average AQI', color_continuous_scale=color_scale_worst)
 
     # Update layout for better visual appeal
@@ -165,8 +165,8 @@ def app():
     col2.plotly_chart(fig_worst, use_container_width=True)
 
 ## AQI Map
-    st.subheader("AQI Map")
-    with st.expander("AQI Map"):
+    st.subheader("Peta AQI")
+    with st.expander("Peta AQI"):
         # Load data
         df_map = filtered_data.copy()
         df_map = df_map[['AQI','Latitude','Longitude','District']]
@@ -229,15 +229,15 @@ def app():
 
     col1, col2 = st.columns(2)
     with col1:
-        selected_parameter = st.selectbox('Select Air Pollutant Parameter', pollutant_parameters)
+        selected_parameter = st.selectbox('Pilih Parameter Polutan Udara', pollutant_parameters)
     with col2:
         frequency_options = {
-            'Daily': 'D',
-            'Weekly': 'W',
-            'Monthly': 'M',
-            'Yearly': 'Y'
+            'Harian': 'D',
+            'Mingguan': 'W',
+            'Bulanan': 'M',
+            'Tahunan': 'Y'
         }
-        selected_frequency_label = st.selectbox('Select Time Frequency', list(frequency_options.keys()))
+        selected_frequency_label = st.selectbox('Pilih Frekuensi Waktu', list(frequency_options.keys()))
         selected_frequency = frequency_options[selected_frequency_label]
 
     # Set 'Date' column as the index
@@ -251,7 +251,7 @@ def app():
 
     # Plot the chart for the selected districts
     fig = px.line(datetime_data_resampled, x='Date', y=selected_parameter, color='District',
-                title=f'{selected_parameter} {selected_frequency_label} Levels by District Over datetime')
+                title=f'Tingkat {selected_parameter} {selected_frequency_label} Berdasarkan Daerah Selama Periode Waktu Tertentu')
 
     # Add range slider
     fig.update_layout(
@@ -272,40 +272,43 @@ def app():
     # Display the chart in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 #==================================================================
-## Distribution of Air Pollutant
+## Correlation of Air Pollutant
 
+    
     # Display Scatter Plot
     col1, col2 = st.columns(2)
     with col1:
-        selected_parameter1 = st.selectbox('Select Parameter 1', pollutant_parameters)
+        selected_parameter1 = st.selectbox('Pilih Parameter 1', pollutant_parameters)
     with col2:
-        selected_parameter2 = st.selectbox('Select Parameter 2', pollutant_parameters)
+        selected_parameter2 = st.selectbox('Pilih Parameter 2', pollutant_parameters)
 
-    col1, col2 = st.columns([1, 3])
+    st.subheader("Korelasi Antar Partikel Udara")
+    col1, col2 = st.columns([3, 1])
     with col1:
-        # Calculate Pearson correlation coefficient
-        corr_part = pearsonr(filtered_data[selected_parameter1], filtered_data[selected_parameter2])
-        percent = round(corr_part[0] * 100, 2)
-
-        if percent > 50:
-            percent_status = 'High Correlation'
-        elif percent > 30:
-            percent_status = 'Medium Correlation'
-        else:
-            percent_status = 'Low Correlation'
-
-        st.markdown(f'##### Korelasi antara {selected_parameter1} dengan {selected_parameter2} (*Pearson*)')
-        st.subheader(f'{percent}%')
-        st.markdown(f'##### ***{percent_status}***')
-    
-    with col2:
         # Display Scatter Plot with color mapping
         fig_scatter = px.scatter(filtered_data, x=selected_parameter1, y=selected_parameter2,
                                 color='AQI Category', color_discrete_map=category_colors,
                                 title=f'{selected_parameter1} vs. {selected_parameter2} Correlation')
 
         st.plotly_chart(fig_scatter, use_container_width=True)
+        st.caption('Korelasi Antar Partikel Udara dengan *Pearson Correlation Coefficient*')
+    
+    with col2:
+        # Calculate Pearson correlation coefficient
+        corr_part = pearsonr(filtered_data[selected_parameter1], filtered_data[selected_parameter2])
+        percent = round(corr_part[0] * 100, 2)
 
+        if percent > 50:
+            percent_status = 'Korelasi Tinggi'
+        elif percent > 30:
+            percent_status = 'Korelasi Menengah'
+        else:
+            percent_status = 'Korelasi Rendah'
+
+        st.markdown(f'##### Korelasi antara {selected_parameter1} dengan {selected_parameter2}')
+        st.subheader(f'{percent}%')
+        st.markdown(f'##### ***{percent_status}***')
+        
 #==================================================================
 # Air Particle Correlation with AQI Category
 
@@ -340,12 +343,12 @@ def app():
                                     textinfo='label+percent', 
                                     pull=[0, 0, 0, 0, 0, 0.1])])
         fig.update_layout(
-            title='Korelasi Partikel Udara Terhdap Kategori AQI',
+            title='Korelasi Partikel Udara terhadap Kategori AQI',
             title_font_size=20
         )
 
         st.plotly_chart(fig, use_container_width=True)
-        st.caption('Korelasi Partikel Udara dengan Kategori Kualitas Udara dengan *Kendall-tau Score*')
+        st.caption('Korelasi Partikel Udara terhadap Kategori Kualitas Udara dengan *Kendall-tau Score*')
 
     with col2:
         st.write('''Partikel - partikel udara seperti *PM10, PM2.5, O3, NO2, CO*, dan *SO2* ini memang merupakan 
@@ -361,7 +364,7 @@ def app():
     agg_data = agg_data.groupby('District').mean().reset_index()
 
     fig = px.bar(agg_data, x='District', y=agg_data.columns[1:], barmode='group',
-                title='Average Pollution Levels by District',
+                title='Tingkat Rataan Polusi Berdasarkan Distrik',
                 labels={'value': 'Average Pollution Level', 'variable': 'Pollutant'})
     st.plotly_chart(fig, use_container_width=True)
 

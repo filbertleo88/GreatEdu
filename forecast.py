@@ -1,93 +1,77 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pickle
 import plotly.graph_objects as go
 from keras.models import load_model as keras_model
 from sklearn.preprocessing import MinMaxScaler
-import joblib
 
-import pickle
-import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.callbacks import EarlyStopping
-
-import tensorflow as tf
-from tensorflow.keras.optimizers import Adam
-from keras.models import Sequential
-from keras.layers import LSTM, Bidirectional
-from keras.layers import Dense
-from keras.layers import RepeatVector
-from keras.layers import TimeDistributed
-from keras.layers import Dropout
-
 from tensorflow.keras.callbacks import EarlyStopping, LearningRateScheduler
 
+import tensorflow as tf
+from tensorflow.keras import optimizers
+from keras.models import Sequential
+from keras.layers import LSTM, Bidirectional, Dense, RepeatVector, TimeDistributed, Dropout
+
 from numpy import array
-from numpy import hstack
+
+def load_data(file_path, index_col=None):
+    # index_col akan diabaikan jika None
+    df = pd.read_csv(file_path, index_col=index_col)
+    return df
 
 # Load Model Machine Learning
 def load_model(file_path):
     try:
-        model = joblib.load(file_path)
+        model_in = open(file_path, 'rb')
+        model = pickle.load(model_in)
         return model
     except Exception as e:
         st.error(f"Error loading the model: {e}")
         return None
 
 def app():
-    st.title('Pollutant Forecasting Streamlit App')
-    st.subheader('Forecasting Pollutant in Seoul')
+    st.title('Selamat Datang di Aplikasi Prediksi Kualitas Udara')
+    st.subheader('''Prediksi Time Series Partikel Udara dan Kualitas Udara di Seoul Menggunakan Algoritma Long Short Term Memory''')
 
-    filepath = 'df_daily_pollution.csv'
+    # Load data
+    filepath = 'datasets/df_final.csv'
+    df = load_data(filepath)
+    df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')  # Convert 'Date' to datetime
+    df.set_index('Date', inplace=True)
 
-    def load_data(pathfile):
-        df = pd.read_csv(pathfile, sep=';')
-        df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')  # Convert 'Date' to datetime
-        df.set_index('Date', inplace=True)  # Set 'Date' as the index
-        return df
-
-    df_ISPU = load_data(filepath)
+    # Load model time series
+    model = keras_model('models/my_model.h5')
 
     # Load the trained classifier model from the file
-    model_file_path = "models/lgbm.sav"  # Ganti dengan path model yang benar
+    model_file_path = "models/rfc.pkl"  # Ganti dengan path model 
     classifier = load_model(model_file_path)
+    
+#================================================================
 
-    # Load model
-    model_filename = 'models/my_model'  # Adjust filename if needed
-    # model = tf.keras.models.load_model(model_filename)
-    # model = keras_model('model_101.h5')
-    # st.write(model)
+    # Make sure 'District' column is available in df
+    if 'District' in df.columns:
+        # Function to get dataset based on selected District
+        def get_dataset(df, district):
+            df_filtered = df[df['District'] == district]
+            df_filtered = df_filtered.drop(columns=['AQI', 'AQI Category', 'Station code', 'District', 'Latitude', 'Longitude'])
+            return df_filtered
 
-    model = tf.keras.models.load_model('model_101.h5')
-    # model = joblib.load("models/model_101.pkl")
+        # Extract unique districts
+        districts = df['District'].unique()
 
-    # Function to create new dataframes for each pollutant
-    def makenewdf(df_ISPU):
-        df_pm10 = df_ISPU[['PM10']]
-        df_pm25 = df_ISPU[['PM2.5']]
-        df_so2 = df_ISPU[['SO2']]
-        df_co = df_ISPU[['CO']]
-        df_o3 = df_ISPU[['O3']]
-        df_no2 = df_ISPU[['NO2']]
-        return df_pm10, df_pm25, df_so2, df_co, df_o3, df_no2
+        # Select Dataset
+        choose_data = st.sidebar.selectbox("Pilih Daerah", options=districts)
+        st.subheader(f"Dataframe {choose_data}")
 
-    df_pm10, df_pm25, df_so2, df_co, df_o3, df_no2 = makenewdf(df_ISPU)
+        # Filter dataset based on the selected district
+        df_filtered = get_dataset(df, choose_data)
+        st.dataframe(df_filtered, use_container_width=True)
+    else:
+        st.error("The dataset does not contain a 'District' column.")
 
-    # Function to get dataset based on selected station code
-    def get_dataset(df_ISPU, station_code):
-        df_filtered = df_ISPU[df_ISPU['Station code'] == int(station_code)]
-        df_filtered = df_filtered.drop(columns=['Station code', 'Latitude', 'Longitude','Address'])
-        return df_filtered
-
-    # Select Dataset
-    choose_data = st.sidebar.selectbox("Choose a Dataset", options=['101', '102', '103'])
-    st.header(f'Station Code: {choose_data}')
-    st.subheader("Dataframe")
-
-    df = get_dataset(df_ISPU, choose_data)
-    st.write(df)
+#==================================================
 
     # Split a multivariate sequence into samples
     def split_sequences(sequences, n_steps_in, n_steps_out):
@@ -109,11 +93,11 @@ def app():
     def plot_forecast(df, forecast_df):
         for column in df.columns:
             fig = go.Figure()
-            fig.add_trace(go.Scatter(x=df.index, y=df[column], mode='lines', name='Original'))
-            fig.add_trace(go.Scatter(x=forecast_df.index, y=forecast_df[column], mode='lines', name='Forecasted'))
+            fig.add_trace(go.Scatter(x=df.index, y=df[column], mode='lines', name='Historikal'))
+            fig.add_trace(go.Scatter(x=forecast_df.index, y=forecast_df[column], mode='lines', name='Prakiraan'))
             
             fig.update_layout(
-                title=f'Original vs Forecasted {column}',
+                title=f'Historikal vs Prakiraan {column}',
                 xaxis_title='Date',
                 yaxis_title=column,
                 xaxis=dict(
@@ -131,16 +115,14 @@ def app():
             st.plotly_chart(fig)
 
     if model:
-        st.write("Model loaded and ready for predictions.")
-
         # Number input for forecast days
-        n_forecast_days = st.number_input('Number of days to forecast', min_value=1, max_value=365, value=30)
+        n_forecast_days = st.number_input('Jumlah hari yang ingin diprediksi', min_value=1, max_value=365, value=30)
 
         # Add predict button
         if st.button('Prediksi'):
             # Prepare test data
             scaler = MinMaxScaler()
-            df_scaled = scaler.fit_transform(df)
+            df_scaled = scaler.fit_transform(df_filtered)
 
             n_steps_in, n_steps_out = 1, 1  # Set your steps here
             df_sequences, _ = split_sequences(df_scaled, n_steps_in, n_steps_out)
@@ -155,19 +137,21 @@ def app():
             forecast_reshaped = np.array(forecast).reshape(-1, df_scaled.shape[1])
             forecast_inverse = scaler.inverse_transform(forecast_reshaped)
 
-            forecast_df = pd.DataFrame(forecast_inverse, columns=df.columns)
+            forecast_df = pd.DataFrame(forecast_inverse, columns=df_filtered.columns)
             forecast_df = forecast_df.round(3)
 
-            start_date = df.index[-1] + pd.DateOffset(days=1)
+            start_date = df_filtered.index[-1] + pd.DateOffset(days=1)
             date_range = pd.date_range(start=start_date, periods=len(forecast_df))
             forecast_df.index = date_range
 
-            st.subheader("Forecasted Data")
-            # st.write(forecast_df)
+            st.subheader("Data Prakiraan")
 
             # Plot the forecasted data
-            plot_forecast(df, forecast_df)
+            plot_forecast(df_filtered, forecast_df)
 
+#=====================================================================
+            st.divider()
+            # Prediksi Tingkat Kualitas Udara
             def predict_pollution(so2, no2, o3, co, pm10, pm25):
                 if classifier is not None:
                     prediction = classifier.predict([[so2, no2, o3, co, pm10, pm25]])
@@ -179,7 +163,10 @@ def app():
                 pollution_levels = {0: 'Good', 1: 'Moderate', 2: 'Unhealthy', 3: 'Very Unhealthy'}
                 return pollution_levels[prediction]
             
-            forecast_df['Pollution Level'] = forecast_df.apply(lambda row: map_pollution_level(predict_pollution(row['SO2'], row['NO2'], row['O3'], row['CO'], row['PM10'], row['PM2.5'])[0]), axis=1)
+            forecast_df['AQI Category'] = forecast_df.apply(lambda row: map_pollution_level(predict_pollution(row['SO2'], row['NO2'], row['O3'], row['CO'], row['PM10'], row['PM2.5'])[0]), axis=1)
 
-            st.subheader("Forecasted Data with Pollution Levels")
-            st.dataframe(forecast_df)
+            # Tambahkan kolom district
+            forecast_df['District'] = choose_data
+            
+            st.subheader("Data Prakiraan dengan Kategori AQI")
+            st.dataframe(forecast_df, use_container_width=True)
