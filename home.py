@@ -39,7 +39,7 @@ def app():
     # Menampilkan data CSV dalam tabel jika ada data yang valid
     if df is not None:
         st.subheader("Data Polusi Udara di Seoul")
-        st.dataframe(df)
+        st.dataframe(df, use_container_width=True)
     else:
         st.write("Silakan download dataset terlebih dahulu.")
 
