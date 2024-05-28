@@ -56,7 +56,7 @@ wilayah di Seoul. Selain itu, perhitungan indeks kualitas udara (AQI) didasarkan
 yang menyediakan informasi tentang standar dan metode perhitungan AQI untuk memastikan akurasi dan konsistensi dalam penilaian kualitas udara.
 
 ## Exploratory Data Analysis
-Menyajikan temuan utama dan wawasan dari proses analisis data eksploratif (EDA).
+Menyajikan temuan utama dan wawasan dari proses analisis data eksploratif (EDA).[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1mQHPx1Z-horXgvc6vfRgpT9Vpxm8lAu_)
 
 ## Visualisasi
 Menampilkan visualisasi yang dibuat oleh dashboard Streamlit.
