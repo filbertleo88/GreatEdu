@@ -51,7 +51,8 @@ def app():
     st.divider()
     # Dataset
     # Membaca file CSV ke dalam DataFrame
-    file_path = "datasets/df_final.csv"
+    file_path = "datasets/df_daily_pollution_with_aqi.csv" # Sebelum Handling Outlier
+    # file_path = "datasets/df_final.csv" # Setelah Handling Outlier
     df = load_data(file_path)
     df['Date'] = pd.to_datetime(df['Date'])
     df.set_index('Date', inplace=True)
