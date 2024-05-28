@@ -47,6 +47,8 @@ def app():
         st.info("""
         Kami menggunakan model Random Forest Classifier untuk memprediksi tingkat kualitas udara di kota Seoul:
         - Accuracy Score = 0.984
+        - Recall Score = 0.98
+        - Precision Score = 0.98
         - F1 Score = 0.984
         """)
     with tab6:
