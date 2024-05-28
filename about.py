@@ -64,7 +64,7 @@ def app():
     st.markdown("""
         - **Proses Analisis:** [Link ke Colab](https://colab.research.google.com/drive/1mQHPx1Z-horXgvc6vfRgpT9Vpxm8lAu_?usp=sharing)
         - **GitHub Project:** [Link ke GitHub](https://github.com/filbertleo88/GreatEdu-Final-Project---Air-Quality-Seoul-Analysis-dan-Prediction)
-        - **PowerPoint:** [Link ke PPT]()
+        - **PowerPoint:** [Link ke PPT](https://docs.google.com/presentation/d/1THM8Yf-Bo8zogFtPtrq4pI9--QCEsqzgxOt4fbZc7Tw/edit?usp=sharing)
     """)
 
     st.subheader("Kontak")
