@@ -5,7 +5,7 @@ def app():
 
     st.subheader("Deskripsi Projek")
     st.markdown("""
-        Projek ini merupakan projek akhir dari Program MSIB 6 Data Science bersama GreatEdu yang 
+        Projek ini merupakan projek akhir dari Program SIB 6 Data Science bersama GreatEdu yang 
         dikerjakan oleh kelompok 1 (Kelas Mentoring 3 bersama Kak Salsa). Projek ini disusun semata-mata 
         untuk tujuan pendidikan dan pembelajaran.
         """)
