@@ -54,7 +54,7 @@ def app():
     file_path = "datasets/df_daily_pollution_with_aqi.csv" # Sebelum Handling Outlier
     # file_path = "datasets/df_final.csv" # Setelah Handling Outlier
     df = load_data(file_path)
-    df['Date'] = pd.to_datetime(df['Date'])
+    # df['Date'] = pd.to_datetime(df['Date'])
     df.set_index('Date', inplace=True)
 
     # Menampilkan data CSV dalam tabel jika ada data yang valid
