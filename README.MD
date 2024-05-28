@@ -55,12 +55,12 @@ Proyek ini menggunakan data polusi udara dari [Kaggle](https://www.kaggle.com/da
 wilayah di Seoul. Selain itu, perhitungan indeks kualitas udara (AQI) didasarkan pada parameter polutan yang diperoleh dari [AirKorea](https://airkorea.or.kr/eng/khaiInfo?PMENU_NO=166), 
 yang menyediakan informasi tentang standar dan metode perhitungan AQI untuk memastikan akurasi dan konsistensi dalam penilaian kualitas udara.
 
-## Exploratory Data Analysis
-Menyajikan temuan utama dan wawasan dari proses analisis data eksploratif (EDA).[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1mQHPx1Z-horXgvc6vfRgpT9Vpxm8lAu_)
+## Exploratory Data Analysis [![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1mQHPx1Z-horXgvc6vfRgpT9Vpxm8lAu_)
+Menyajikan temuan utama dan wawasan dari proses analisis data eksploratif (EDA).
 
-## Visualisasi
+## Visualisasi [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://greatedu-final-project---air-quality-seoul-analysis-dan-predic.streamlit.app/)
 Menampilkan visualisasi yang dibuat oleh dashboard Streamlit.
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://greatedu-final-project---air-quality-seoul-analysis-dan-predic.streamlit.app/)
+
 
 ## Credits
 Proyek ini merupakan hasil kolaborasi dalam Proyek Akhir Data Science GreatEdu dengan rekan-rekan dari kelompok 1. Saya sangat berterima kasih atas kerjasama yang solid dan kontribusi 
